@@ -58,34 +58,34 @@ class Borrowing(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-class Payment(models.Model):
-    PENDING = 'P'
-    PAID = 'A'
-    STATUS_CHOICES = [
-        (PENDING, 'Pending'),
-        (PAID, 'Paid'),
-    ]
-    PAYMENT = 'P'
-    FINE = 'F'
-    TYPE_CHOICES = [
-        (PAYMENT, 'Payment'),
-        (FINE, 'Fine'),
-    ]
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
-    payment_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
-    borrowing = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
-    payment_session_url = models.URLField(null=True, blank=True)
-    payment_session_id = models.CharField(max_length=255, null=True, blank=True)
-    money_to_pay = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-
-
-
-class TelegramNotification(models.Model):
-    borrowing = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
-    notification_type = models.CharField(max_length=255)
-    message = models.TextField()
-
-
-class Payment(models.Model):
-    borrowing = models.OneToOneField(Borrowing, on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, choices=Borrowing.STATUS_CHOICES, default=Borrowing.PENDING)
+# class Payment(models.Model):
+#     PENDING = 'P'
+#     PAID = 'A'
+#     STATUS_CHOICES = [
+#         (PENDING, 'Pending'),
+#         (PAID, 'Paid'),
+#     ]
+#     PAYMENT = 'P'
+#     FINE = 'F'
+#     TYPE_CHOICES = [
+#         (PAYMENT, 'Payment'),
+#         (FINE, 'Fine'),
+#     ]
+#     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
+#     payment_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
+#     borrowing = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
+#     payment_session_url = models.URLField(null=True, blank=True)
+#     payment_session_id = models.CharField(max_length=255, null=True, blank=True)
+#     money_to_pay = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+#
+#
+#
+# class TelegramNotification(models.Model):
+#     borrowing = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
+#     notification_type = models.CharField(max_length=255)
+#     message = models.TextField()
+#
+#
+# class Payment(models.Model):
+#     borrowing = models.OneToOneField(Borrowing, on_delete=models.CASCADE)
+#     status = models.CharField(max_length=1, choices=Borrowing.STATUS_CHOICES, default=Borrowing.PENDING)
