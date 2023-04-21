@@ -1,5 +1,5 @@
 """
-ASGI config for cinema_service project.
+ASGI config for library_service project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

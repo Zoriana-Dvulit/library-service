@@ -1,5 +1,5 @@
 """
-WSGI config for cinema_service project.
+WSGI config for library_service project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
