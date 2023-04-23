@@ -4,7 +4,7 @@ from books.models import Borrowing
 from books.views import (
     index,
     BookList,
-    BookDetail, BorrowingList, BorrowingDetail, ReturnBorrowingView
+    BookDetail, BorrowingList, BorrowingDetail, ReturnBorrowingView, CreateBorrowingView
 )
 
 urlpatterns = [
@@ -34,6 +34,10 @@ urlpatterns = [
         ReturnBorrowingView.as_view(),
         name="return-borrowing"
     ),
+    path(
+        "borrowings/create/",
+        CreateBorrowingView.as_view(),
+        name="create_borrowing"),
 ]
 
 app_name = "books"
