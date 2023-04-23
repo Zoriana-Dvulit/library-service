@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views import View
 from rest_framework import generics
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from books.models import Book, Borrowing
@@ -46,10 +46,25 @@ class BookDetail(RetrieveUpdateDestroyAPIView):
 
 class BorrowingList(generics.ListCreateAPIView):
     serializer_class = BorrowingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & (IsAdminUser | ~IsAdminUser)]
 
     def get_queryset(self):
-        return Borrowing.objects.filter(user_id=self.request.user)
+        if self.request.user.is_superuser and "user_id" in self.request.query_params:
+            user_id = self.request.query_params["user_id"]
+            queryset = Borrowing.objects.filter(borrower__id=user_id)
+        elif self.request.user.is_superuser:
+            queryset = Borrowing.objects.all()
+        else:
+            queryset = Borrowing.objects.filter(borrower=self.request.user)
+
+        if "is_active" in self.request.query_params:
+            is_active = self.request.query_params["is_active"]
+            if is_active.lower() == "true":
+                queryset = queryset.filter(actual_return_date__isnull=True)
+            elif is_active.lower() == "false":
+                queryset = queryset.exclude(actual_return_date__isnull=True)
+
+        return queryset
 
 
 class BorrowingDetail(generics.RetrieveAPIView):
