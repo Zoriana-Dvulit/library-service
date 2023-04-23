@@ -4,7 +4,7 @@ from books.models import Borrowing
 from books.views import (
     index,
     BookList,
-    BookDetail
+    BookDetail, BorrowingList, BorrowingDetail
 )
 
 urlpatterns = [
