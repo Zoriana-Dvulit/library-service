@@ -1,4 +1,4 @@
-from book.models import Book
+from books.models import Book
 
 
 def scrape_books() -> list[Book]:
