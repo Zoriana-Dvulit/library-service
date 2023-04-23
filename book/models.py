@@ -16,6 +16,9 @@ class Book(models.Model):
     inventory = models.PositiveIntegerField(validators=[MinValueValidator(0)])
     daily_fee = models.DecimalField(max_digits=8, decimal_places=2)
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class User(AbstractBaseUser):
     user_id = models.IntegerField(unique=True)
@@ -24,6 +27,9 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.first_name + " " + self.last_name
+
 
 class Borrowing(models.Model):
     borrow_date = models.DateField(auto_now_add=True)
@@ -31,6 +37,9 @@ class Borrowing(models.Model):
     actual_return_date = models.DateField(null=True, blank=True)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.expected_return_date
 
 
 class Payment(models.Model):
@@ -49,3 +58,6 @@ class Payment(models.Model):
     session_url = models.URLField(null=True, blank=True)
     session_id = models.CharField(max_length=255, null=True, blank=True)
     money_to_pay = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.money_to_pay
