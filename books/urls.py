@@ -10,12 +10,12 @@ urlpatterns = [
     path(
         "books/",
         BookListView.as_view(),
-        name="books-list",
+        name="book-list",
     ),
     path(
         "books/<int:pk>/",
         BookDetailView.as_view(),
-        name="books-detail",
+        name="book-detail",
     ),
 ]
 
