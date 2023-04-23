@@ -5,12 +5,12 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("book", "0002_customer_delete_user"),
+        ("books", "0002_customer_delete_user"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name="book",
+            model_name="books",
             name="book_id",
         ),
     ]

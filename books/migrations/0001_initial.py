@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 (
                     "book_id",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="book.book"
+                        on_delete=django.db.models.deletion.CASCADE, to="books.books"
                     ),
                 ),
                 (
@@ -139,7 +139,7 @@ class Migration(migrations.Migration):
                 (
                     "borrowing_id",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="book.borrowing"
+                        on_delete=django.db.models.deletion.CASCADE, to="books.borrowing"
                     ),
                 ),
             ],
