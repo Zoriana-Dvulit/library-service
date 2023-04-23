@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
     # "drf_spectacular",
     "debug_toolbar",
     "books",
@@ -154,7 +155,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #         "rest_framework_simplejwt.authentication.JWTAuthentication",
 #     ),
 # }
-#
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
 # SPECTACULAR_SETTINGS = {
 #     "TITLE": "Cinema Service API",
 #     "DESCRIPTION": "Order cinema tickets",
@@ -167,9 +176,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #         "defaultModelExpandDepth": 2,
 #     },
 # }
-#
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-#     "ROTATE_REFRESH_TOKENS": False,
-# }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+}
