@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # "drf_spectacular",
     "debug_toolbar",
-    "book",
+    "books",
     # "user",
 ]
 
@@ -86,11 +86,8 @@ WSGI_APPLICATION = "library.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ["DB_HOST"],
-        "NAME": os.environ["DB_NAME"],
-        "USER": os.environ["DB_USER"],
-        "PASSWORD": os.environ["DB_PASSWORD"],
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -166,9 +163,9 @@ REST_FRAMEWORK = {
 #         "defaultModelExpandDepth": 2,
 #     },
 # }
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-}
+#
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+#     "ROTATE_REFRESH_TOKENS": False,
+# }
