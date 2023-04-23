@@ -1,39 +1,30 @@
+from django.shortcuts import render
+from django.views import generic
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .models import Book
-from .serializers import BookSerializer
+
+from books.models import Book
+from books.serializers import BookSerializer
 
 
-class BookList(generics.ListCreateAPIView):
+def index(request):
+    """View function for the home page of the site."""
+
+    num_books = Book.objects.count()
+
+    context = {
+        "num_books": num_books,
+    }
+
+    return render(request, "books/index.html", context=context)
+
+
+class BookListView(generic.ListView):
+    model = Book
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    paginate_by = 5
 
 
-class BookDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def patch(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class BookDetailView(generic.DetailView):
+    model = Book
