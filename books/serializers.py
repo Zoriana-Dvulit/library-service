@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from books.models import Book, Borrowing
 
@@ -41,3 +42,12 @@ class BorrowingSerializer(serializers.ModelSerializer):
             book=book,
             borrower=self.context["request"].user,
         )
+
+
+User = get_user_model()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"

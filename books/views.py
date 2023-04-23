@@ -1,14 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views import View
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from books.models import Book, Borrowing
-from books.serializers import BookSerializer, BorrowingSerializer
+from books.serializers import BookSerializer, BorrowingSerializer, UserSerializer
 
 
 def index(request):
@@ -94,3 +95,28 @@ class ReturnBorrowingView(View):
         book.save()
 
         return HttpResponse("Borrowing has been returned successfully")
+
+
+User = get_user_model()
+
+
+class UserCreateView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+
+class UserRetrieveView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserUpdateView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserDeleteView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
