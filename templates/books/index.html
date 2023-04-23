@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Library Service Home</h1>
+  <p>Welcome to Best Library Ever!</p>
+  <h2>Dynamic content</h2>
+  <p>The Library service has the following record counts:</p>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+{#    <li><strong>Drivers:</strong> {{ num_drivers }}</li>#}
+{#    <li><strong>Manufacturers:</strong> {{ num_manufacturers }}</li>#}
+  </ul>
+{% endblock %}
