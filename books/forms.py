@@ -1,6 +1,6 @@
 from django import forms
 
-from book import models
+from books import models
 
 
 class Payment(models.Model):
