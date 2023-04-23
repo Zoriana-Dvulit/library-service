@@ -1,13 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import generic
-from rest_framework import generics, status
-from rest_framework.permissions import BasePermission, SAFE_METHODS
-from rest_framework.response import Response
+from django.shortcuts import render
+from rest_framework import generics
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from books.models import Book
-from books.serializers import BookSerializer
+from books.models import Book, Borrowing
+from books.serializers import BookSerializer, BorrowingSerializer
 
 
 def index(request):
@@ -20,6 +18,7 @@ def index(request):
     }
 
     return render(request, "books/index.html", context=context)
+
 
 class IsAdminOrReadOnly(BasePermission):
     def has_permission(self, request, view):
@@ -40,3 +39,17 @@ class BookDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = BookSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminOrReadOnly]
+
+
+class BorrowingList(generics.ListCreateAPIView):
+    serializer_class = BorrowingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Borrowing.objects.filter(user_id=self.request.user)
+
+
+class BorrowingDetail(generics.RetrieveAPIView):
+    serializer_class = BorrowingSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Borrowing.objects.all()
