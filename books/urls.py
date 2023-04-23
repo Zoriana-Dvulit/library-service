@@ -20,12 +20,12 @@ urlpatterns = [
         name="book-detail",
     ),
     path(
-        "books/",
+        "borrowings/",
         BorrowingList.as_view(),
         name="borrowing-list"
     ),
     path(
-        "books/<int:pk>/",
+        "borrowings/<int:pk>/",
         BorrowingDetail.as_view(),
         name="borrowing-detail"
     ),
