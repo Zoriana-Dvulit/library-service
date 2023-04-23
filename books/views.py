@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from books.models import Book
 from books.serializers import BookSerializer
@@ -19,12 +20,11 @@ def index(request):
     return render(request, "books/index.html", context=context)
 
 
-class BookListView(generic.ListView):
-    model = Book
+class BookList(ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    paginate_by = 5
 
 
-class BookDetailView(generic.DetailView):
-    model = Book
+class BookDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
