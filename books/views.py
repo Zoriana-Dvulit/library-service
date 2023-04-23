@@ -58,6 +58,12 @@ class BorrowingDetail(generics.RetrieveAPIView):
     queryset = Borrowing.objects.all()
 
 
+class CreateBorrowingView(generics.CreateAPIView):
+    queryset = Borrowing.objects.all()
+    serializer_class = BorrowingSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class ReturnBorrowingView(View):
     def post(self, request, borrowing_id):
         borrowing = get_object_or_404(Borrowing, pk=borrowing_id)
