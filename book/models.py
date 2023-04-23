@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -9,7 +9,6 @@ class Book(models.Model):
         HARD = "Hard"
         SOFT = "Soft"
 
-    book_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     cover = models.CharField(max_length=50, choices=CoverChoices.choices)
@@ -20,15 +19,19 @@ class Book(models.Model):
         return self.title
 
 
-class User(AbstractBaseUser):
-    user_id = models.IntegerField(unique=True)
+class Customer(AbstractUser):
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
 
-    def __str__(self) -> str:
-        return self.first_name + " " + self.last_name
+    groups = models.ManyToManyField(
+        "auth.Group", related_name="customers", blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        "auth.Permission", related_name="customers", blank=True
+    )
+
+    def __str__(self):
+        return {self.username}
 
 
 class Borrowing(models.Model):
@@ -39,7 +42,7 @@ class Borrowing(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.expected_return_date
+        return f"Borrowing of {self.book_id} by {self.user_id} (Expected return date: {self.expected_return_date})"
 
 
 class Payment(models.Model):
@@ -60,4 +63,5 @@ class Payment(models.Model):
     money_to_pay = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
     def __str__(self):
-        return self.money_to_pay
+        return f"Payment for {self.type} ({self.status}) of {self.borrowing_id} by user {self.borrowing_id.user_id.username} for {self.money_to_pay} $USD"
+
