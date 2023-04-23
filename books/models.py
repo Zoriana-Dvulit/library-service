@@ -64,4 +64,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for {self.type} ({self.status}) of {self.borrowing_id} by user {self.borrowing_id.user_id.username} for {self.money_to_pay} $USD"
-
