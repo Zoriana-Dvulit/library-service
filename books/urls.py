@@ -4,7 +4,7 @@ from books.models import Borrowing
 from books.views import (
     index,
     BookList,
-    BookDetail, BorrowingList, BorrowingDetail
+    BookDetail, BorrowingList, BorrowingDetail, ReturnBorrowingView
 )
 
 urlpatterns = [
@@ -28,6 +28,11 @@ urlpatterns = [
         "borrowings/<int:pk>/",
         BorrowingDetail.as_view(),
         name="borrowing-detail"
+    ),
+    path(
+        "borrowings/<int:borrowing_id>/return/",
+        ReturnBorrowingView.as_view(),
+        name="return-borrowing"
     ),
 ]
 
