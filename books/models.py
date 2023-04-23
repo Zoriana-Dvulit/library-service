@@ -35,11 +35,21 @@ class Customer(AbstractUser):
 
 
 class Borrowing(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     borrow_date = models.DateField(auto_now_add=True)
     expected_return_date = models.DateField()
     actual_return_date = models.DateField(null=True, blank=True)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+         models.CheckConstraint(check=models.Q(expected_return_date__gte=models.F("borrow_date")),
+                                name="expected_return_date_gte_borrow_date"),
+         models.CheckConstraint(check=models.Q(actual_return_date__gte=models.F("borrow_date")),
+                                name="actual_return_date_gte_borrow_date"),
+         models.CheckConstraint(check=models.Q(actual_return_date__lte=models.F("expected_return_date")),
+                                name="actual_return_date_lte_expected_return_date"),
+        ]
 
     def __str__(self):
         return f"Borrowing of {self.book_id} by {self.user_id} (Expected return date: {self.expected_return_date})"
@@ -63,4 +73,4 @@ class Payment(models.Model):
     money_to_pay = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"Payment for {self.type} ({self.status}) of {self.borrowing_id} by user {self.borrowing_id.user_id.username} for {self.money_to_pay} $USD"
+        return f"Payment for {self.type} ({self.status}) of {self.borrowing_id} by user {self.borrowing_id.user_id} for {self.money_to_pay} $USD"
