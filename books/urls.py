@@ -15,7 +15,7 @@ urlpatterns = [
     path(
         "books/<int:pk>/",
         BookDetailView.as_view(),
-        name="books_detail",
+        name="books-detail",
     ),
 ]
 
