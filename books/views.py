@@ -8,8 +8,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from books.models import Book, Borrowing
+from books.models import Book
 from books.serializers import BookSerializer, BorrowingSerializer, UserSerializer
+from borrowing.models import Borrowing
 
 
 def index(request):
