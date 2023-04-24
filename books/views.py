@@ -9,8 +9,10 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthentic
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from books.models import Book
-from books.serializers import BookSerializer, BorrowingSerializer, UserSerializer
+from books.serializers import BookSerializer
 from borrowing.models import Borrowing
+from borrowing.serializers import BorrowingSerializer
+from user.serializers import UserSerializer
 
 
 def index(request):
