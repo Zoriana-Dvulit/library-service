@@ -25,22 +25,22 @@ urlpatterns = [
         name="token_verify"
     ),
     path(
-        "users/",
+        "",
         UserCreateView.as_view(),
         name="user-create"
     ),
     path(
-        "users/<int:pk>/",
+        "<int:pk>/",
         UserRetrieveView.as_view(),
         name="user-retrieve"
     ),
     path(
-        "users/<int:pk>/update/",
+        "<int:pk>/update/",
         UserUpdateView.as_view(),
         name="user-update"
     ),
     path(
-        "users/<int:pk>/delete/",
+        "<int:pk>/delete/",
         UserDeleteView.as_view(),
         name="user-delete"
     ),
