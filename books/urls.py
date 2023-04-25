@@ -16,7 +16,6 @@ urlpatterns = [
         BookDetail.as_view(),
         name="book-detail",
     ),
-
 ]
 
 app_name = "books"
