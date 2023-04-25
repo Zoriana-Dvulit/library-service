@@ -1,0 +1,20 @@
+[
+  {
+    "model": "user.Customer",
+    "pk": 1,
+    "fields": {
+      "username": "testuser",
+      "email": "testuser@example.com",
+      "password": "pbkdf2_sha256$260000$TzTzwzzvLZaL$L8/Xm7e1DmQ1v7MKW/Dz8I9oTlTZ0TcN7rL3ZiUwt7M=",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2023-04-26T08:24:41.813Z",
+      "date_joined": "2023-04-26T08:24:41.813Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
