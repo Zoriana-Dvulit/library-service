@@ -1,19 +1,17 @@
-from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.views import View
-from rest_framework import generics
+from django.http import HttpResponseBadRequest, HttpResponse
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from borrowing.models import Borrowing
 from borrowing.serializers import BorrowingSerializer
 
 
-# Create your views here.
-
-class BorrowingList(generics.ListCreateAPIView):
+class BorrowingViewSet(viewsets.ModelViewSet):
+    queryset = Borrowing.objects.all()
     serializer_class = BorrowingSerializer
-    permission_classes = [IsAuthenticated & (IsAdminUser | ~IsAdminUser)]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_superuser and "user_id" in self.request.query_params:
@@ -33,31 +31,54 @@ class BorrowingList(generics.ListCreateAPIView):
 
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        borrowing = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
 
-class BorrowingDetail(generics.RetrieveAPIView):
-    serializer_class = BorrowingSerializer
+        book = borrowing.book
+        book.inventory -= 1
+        book.save()
+
+        return HttpResponse(status=201, headers=headers)
+
+    def perform_create(self, serializer):
+        borrowing = serializer.save(borrower=self.request.user)
+        return borrowing
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        book = instance.book
+        book.inventory += 1
+        book.save()
+        return super().destroy(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return HttpResponse(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return HttpResponse(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return HttpResponse(serializer.data)
+
+
+class ReturnBorrowingView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = Borrowing.objects.all()
 
-
-class CreateBorrowingView(generics.CreateAPIView):
-    queryset = Borrowing.objects.all()
-    serializer_class = BorrowingSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class ReturnBorrowingView(View):
     def post(self, request, borrowing_id):
         borrowing = get_object_or_404(Borrowing, pk=borrowing_id)
 
         if borrowing.actual_return_date is not None:
-            return HttpResponseBadRequest("Borrowing has already been returned")
-
-        borrowing.actual_return_date = timezone.now()
-        borrowing.save()
-
-        book = borrowing.book
-        book.inventory += 1
-        book.save()
-
-        return HttpResponse("Borrowing has been returned successfully")
+            return HttpResponseBadRequest
