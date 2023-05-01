@@ -30,3 +30,4 @@ class BorrowingSerializer(serializers.ModelSerializer):
             book=book,
             borrower=self.context["request"].user,
         )
+        return borrowing
