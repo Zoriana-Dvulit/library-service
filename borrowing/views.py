@@ -34,13 +34,8 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        borrowing = self.perform_create(serializer)
+        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-
-        book = borrowing.book
-        book.inventory -= 1
-        book.save()
-
         return HttpResponse(status=201, headers=headers)
 
     def perform_create(self, serializer):
@@ -53,25 +48,6 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         book.inventory += 1
         book.save()
         return super().destroy(request, *args, **kwargs)
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return HttpResponse(serializer.data)
-
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return HttpResponse(serializer.data)
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return HttpResponse(serializer.data)
 
 
 class ReturnBorrowingView(viewsets.ViewSet):
