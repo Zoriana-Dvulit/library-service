@@ -1,8 +1,7 @@
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from django.http import HttpResponseBadRequest, HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 
 from borrowing.models import Borrowing
 from borrowing.serializers import BorrowingSerializer

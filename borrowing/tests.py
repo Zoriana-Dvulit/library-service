@@ -1,8 +1,8 @@
-from rest_framework.authtoken.models import Token
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APIRequestFactory, APIClient, force_authenticate
 
 from books.models import Book
@@ -59,7 +59,6 @@ class BorrowingViewSetTestCase(TestCase):
         force_authenticate(request, user=self.user)
         response = self.view_list(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
     def test_borrowing_create(self):
         data = {
