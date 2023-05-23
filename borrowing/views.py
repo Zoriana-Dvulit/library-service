@@ -16,11 +16,11 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_superuser and "user_id" in self.request.query_params:
             user_id = self.request.query_params["user_id"]
-            queryset = Borrowing.objects.filter(borrower__id=user_id)
+            queryset = Borrowing.objects.filter(user__id=user_id)
         elif self.request.user.is_superuser:
             queryset = Borrowing.objects.all()
         else:
-            queryset = Borrowing.objects.filter(borrower=self.request.user)
+            queryset = Borrowing.objects.filter(user=self.request.user)
 
         if "is_active" in self.request.query_params:
             is_active = self.request.query_params["is_active"]
@@ -39,7 +39,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         return HttpResponse(status=201, headers=headers)
 
     def perform_create(self, serializer):
-        borrowing = serializer.save(borrower=self.request.user)
+        borrowing = serializer.save(user=self.request.user)
         return borrowing
 
     def destroy(self, request, *args, **kwargs):

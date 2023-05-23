@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
@@ -5,6 +6,8 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 from books.models import Book
 from books.serializers import BookSerializer
 from books.views import BookViewSet
+
+User = get_user_model()
 
 
 class BookModelTestCase(TestCase):
@@ -25,7 +28,7 @@ class BookViewSetTestCase(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.view = BookViewSet.as_view({"get": "list"})
-        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.user = User.objects.create_user(username="testuser1", password="testpassword1")
         self.book = Book.objects.create(
             title="Test Book",
             author="Test Author",

@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -10,4 +11,4 @@ class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
