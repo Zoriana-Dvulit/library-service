@@ -25,8 +25,9 @@ def register_user(request):
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
+    print("Password:", password)
+    user = User.objects.create_user(username=username, email=email, password=password)
 
-    user = User.objects.create_user(username=username, email=email)
     user.set_password(password)
     user.save()
 
