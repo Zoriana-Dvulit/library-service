@@ -12,7 +12,7 @@ User = get_user_model()
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []
 
     def get_permissions(self):
         if self.action == "create":
@@ -25,7 +25,7 @@ def register_user(request):
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
-    print("Password:", password)
+
     user = User.objects.create_user(username=username, email=email, password=password)
 
     user.set_password(password)
@@ -37,9 +37,12 @@ def register_user(request):
     access_token = str(refresh.access_token)
     refresh_token = str(refresh)
 
-    return Response({
+    response = Response({
         "message": "User registered successfully",
         "user": serializer.data,
         "access_token": access_token,
         "refresh_token": refresh_token
     })
+    response["Authorization"] = f"Bearer {access_token}"
+
+    return response
