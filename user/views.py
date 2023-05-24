@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from user.serializers import UserSerializer
 
@@ -15,3 +17,8 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.action == "create":
             return []
         return super().get_permissions()
+
+
+@api_view(["POST"])
+def register_user(request):
+    return Response({"message": "User registered successfully"})
