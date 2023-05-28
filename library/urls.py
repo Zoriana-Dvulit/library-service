@@ -20,8 +20,6 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView, TokenVerifyView
 
-from user.views import register_user
-
 urlpatterns = [
                   path("admin/", admin.site.urls),
                   path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
@@ -30,7 +28,6 @@ urlpatterns = [
                   path("books/", include("books.urls", namespace="books")),
                   path("borrowing/", include("borrowing.urls", namespace="borrowing")),
                   path("user/", include("user.urls", namespace="user")),
-                  path("user/register/", register_user, name="register"),
                   path("__debug__/", include("debug_toolbar.urls")),
                   path(
                       "api/token/",
