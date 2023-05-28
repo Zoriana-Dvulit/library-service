@@ -22,14 +22,33 @@ class UserViewSet(viewsets.ModelViewSet):
 
 @api_view(["POST"])
 def register_user(request):
+    """
+    Endpoint: /register/
+    Method: POST
+    Expected Input (Request Body):
+    {
+        "username": string,
+        "email": string,
+        "password": string
+    }
+    Expected Output (Response):
+    {
+        "message": string,
+        "user": {
+            "id": integer,
+            "username": string,
+            "email": string,
+            ...
+        },
+        "access_token": string,
+        "refresh_token": string
+    }
+    """
     username = request.data.get("username")
     email = request.data.get("email")
     password = request.data.get("password")
 
     user = User.objects.create_user(username=username, email=email, password=password)
-
-    user.set_password(password)
-    user.save()
 
     serializer = UserSerializer(user)
 
