@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -56,12 +56,11 @@ def register_user(request):
     access_token = str(refresh.access_token)
     refresh_token = str(refresh)
 
-    response = Response({
+    response_data = {
         "message": "User registered successfully",
         "user": serializer.data,
         "access_token": access_token,
         "refresh_token": refresh_token
-    })
-    response["Authorization"] = f"Bearer {access_token}"
+    }
 
-    return response
+    return Response(response_data, status=status.HTTP_201_CREATED)
